@@ -4,11 +4,11 @@ const Student = require('../models/student.schema')
 const createStudent = async(req, res) => {
     const {firstName, lastName, email, age} = req.body;
 
-    if (firstName === "" || lastName === "" || email === "" || !age) {
+    if (!firstName || !lastName || !email || typeof age !== 'number') {
         return res
         .status(400)
         .json({
-            message: 'All fields are required'
+            message: 'All fields are required and age must be a number'
         });
     }
 
@@ -44,8 +44,24 @@ const createStudent = async(req, res) => {
 };
 
 
-const listStudent = async() => {
+const listStudent = async(req, res) => {
+    try{
+        const students = await Student.find();
+        return res
+        .status(200)
+        .json({
+            message: 'All student records retrieved successfully',
+            data: students
+        })
 
+    } catch(error) {
+        console.error('Error retrieving student records', error)
+        return res
+        .status(500)
+        .json({
+            message: 'Internal Server Error'
+        })
+    }
 };
 
 
@@ -53,16 +69,34 @@ const getStudentById = async() => {
 
 };
 
-const updateStudentRecord = async() => {
+const updateStudentRecord = async(req, res) => {
 
 };
 
 
-const deleteStudent = async() => {
+const deleteStudent = async(req, res) => {
 
 
 };
 
-const countStudent = async() => {
+const countStudent = async(req, res) => {
+    try {
+        const students = await Student.find();
+        const count = students.length;
 
+        return res
+        .status(200)
+        .json({
+            message: 'All student records retrieved successfully',
+            totalRecords: count
+        })
+
+    } catch(error){
+        console.error('Error retrieving student records', error)
+        return res
+        .status(500)
+        .json({
+            message: 'Internal Server Error'
+        });
+    }
 };
