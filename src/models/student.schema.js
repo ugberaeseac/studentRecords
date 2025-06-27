@@ -13,15 +13,14 @@ const studentSchema = new mongoose.Schema({
         trim: true
     },
     email: {
-        type: String
+        type: String,
         required: true,
         unique: true,
         trim: true
     },
     age: {
-        type: Number
-        required: true
-        trim: true
+        type: Number,
+        required: true,
     }
 }, {
     timestamps: true,
