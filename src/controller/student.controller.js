@@ -44,7 +44,7 @@ const createStudent = async(req, res) => {
 };
 
 
-const listStudent = async(req, res) => {
+const listStudents = async(req, res) => {
     try{
         const students = await Student.find();
         return res
@@ -65,25 +65,94 @@ const listStudent = async(req, res) => {
 };
 
 
-const getStudentById = async() => {
-
-};
-
 const updateStudentRecord = async(req, res) => {
 
+    const { id } = req.params;
+    const { firstName, lastName, email, age } = req.body;
+
+    try {
+        const student = await Student.findById(id)
+        if (!student) {
+            return res
+            .status(404)
+            .json({
+                message: 'The student record you want to update does not exist'
+            })
+        }
+
+        student.firstName = firstName || student.firstName;
+        student.lastName = lastName || student.lastName;
+        //student.email = email || student.email;
+        student.age = age || student.age
+
+        if (email && email !== student.email) {
+            student = await Student.findOne({ email });
+            if (email) {
+                return res
+                .status(409)
+                .json({
+                    message: 'This email address has been used by another student'
+                })
+            }
+        }
+        student.email = email;
+
+        await student.save()
+        return res
+        .status(200)
+        .json({
+            message: 'Student record updated successfully',
+            data: student
+        })
+
+    } catch(error) {
+        console.error('Error updating student records', error);
+        return res
+        .status(500)
+        .json({
+            message: 'Internal Server Error'
+        })
+    }
 };
 
 
 const deleteStudent = async(req, res) => {
 
+    const { id } = req.params;
+    
+    try {
+        const student = await Student.findByIdAndDelete(id);
+        if (!student) {
+            return res
+            .status(404)
+            .json({
+                message: 'The student record you want to delete does not exist'
+            })    
+        }
+
+        return res
+        .status(200)
+        .json({
+            message: 'Student record deleted successfully',
+            data: student
+        });
+
+    } catch(error) {
+        console.error('There was a problem deleting student record', error);
+        return res
+        .status(500)
+        .json({
+            message: 'Internal Server Error'
+        })
+    }
 
 };
 
 const countStudent = async(req, res) => {
     try {
-        const students = await Student.find();
-        const count = students.length;
-        // const count = await Student.countDocuments();
+        //const students = await Student.find();
+        //const count = students.length;
+        const count = await Student.countDocuments();
 
         return res
         .status(200)
@@ -105,7 +174,7 @@ const countStudent = async(req, res) => {
 
 module.exports = {
     createStudent,
-    listStudent,
+    listStudents,
     updateStudentRecord,
     deleteStudent,
     countStudent
