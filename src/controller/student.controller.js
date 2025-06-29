@@ -83,6 +83,7 @@ const countStudent = async(req, res) => {
     try {
         const students = await Student.find();
         const count = students.length;
+        // const count = await Student.countDocuments();
 
         return res
         .status(200)
@@ -100,3 +101,12 @@ const countStudent = async(req, res) => {
         });
     }
 };
+
+
+module.exports = {
+    createStudent,
+    listStudent,
+    updateStudentRecord,
+    deleteStudent,
+    countStudent
+}
