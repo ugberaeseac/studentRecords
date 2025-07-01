@@ -1,4 +1,4 @@
-# Student Records Management API
+# Student Records API
 
 This is a RESTful API built with **Node.js**, **Express**, and **MongoDB** to manage student records — enabling create, read, update, delete (CRUD) operations and count student records.
 
@@ -38,7 +38,7 @@ studentRecords/
 
 1. **Clone the repository**
    ```bash
-   git clone <your_repo_url>
+   git clone <https://github.com/ugberaeseac/studentRecords.git>
    cd studentRecords
    ```
 
