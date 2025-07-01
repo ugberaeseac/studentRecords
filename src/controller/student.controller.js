@@ -31,7 +31,8 @@ const createStudent = async(req, res) => {
         return res
         .status(201)
         .json({
-            message: 'A new student record has been created'
+            message: 'A new student record has been created',
+            data: newStudent
         })
     } catch(error)   {
         console.error('Error creating student record', error)
@@ -67,11 +68,11 @@ const listStudents = async(req, res) => {
 
 const updateStudentRecord = async(req, res) => {
 
-    const { id } = req.params;
+    const { _id } = req.params;
     const { firstName, lastName, email, age } = req.body;
 
     try {
-        const student = await Student.findById(id)
+        const student = await Student.findById({ _id })
         if (!student) {
             return res
             .status(404)
@@ -86,8 +87,8 @@ const updateStudentRecord = async(req, res) => {
         student.age = age || student.age
 
         if (email && email !== student.email) {
-            student = await Student.findOne({ email });
-            if (email) {
+            const checkStudent = await Student.findOne({ email });
+            if (checkStudent) {
                 return res
                 .status(409)
                 .json({
@@ -118,10 +119,10 @@ const updateStudentRecord = async(req, res) => {
 
 const deleteStudent = async(req, res) => {
 
-    const { id } = req.params;
+    const { _id } = req.params;
     
     try {
-        const student = await Student.findByIdAndDelete(id);
+        const student = await Student.findByIdAndDelete({ _id });
         if (!student) {
             return res
             .status(404)

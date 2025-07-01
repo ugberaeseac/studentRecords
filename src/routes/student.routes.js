@@ -6,8 +6,8 @@ const router = express.Router()
 
 router.post('/students', createStudent)
 router.get('/students', listStudents)
-router.put('/students/:id', updateStudentRecord)
-router.delete('/students/:id', deleteStudent)
+router.put('/students/:_id', updateStudentRecord)
+router.delete('/students/:_id', deleteStudent)
 router.get('/students/count', countStudent)
 
 
